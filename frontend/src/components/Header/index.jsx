@@ -6,7 +6,7 @@ import Menu from '../Menu'
 const Header = () => {
   return (
     <HeaderComponent>
-      <Logo data-name="Logo" />
+      <Logo />
       <Menu />
     </HeaderComponent>
   )

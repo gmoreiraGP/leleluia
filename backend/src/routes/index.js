@@ -7,7 +7,7 @@ const invoice = require('./invoiceRoute')
 const auth = require('./authenticateRoute')
 
 const corsOptions = {
-  origin: '*',
+  origin: 'http://localhost:3000',
   methods: 'GET, HEAD, PUT, PATCH, POST, DELETE'
 }
 
@@ -20,9 +20,9 @@ module.exports = app => {
       extended: true
     })
   )
+  app.use(cors(corsOptions))
   app.use('/uploads', express.static('uploads'))
   app.use(users)
   app.use(invoice)
   app.use(auth)
-  app.use(cors(corsOptions))
 }
