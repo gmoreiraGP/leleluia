@@ -2,13 +2,19 @@ require('dotenv').config()
 const database = require('../models')
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
-const request = require('request')
+const nodemailer = require('nodemailer')
+const postmarkTransport = require('nodemailer-postmark-transport')
 
 const generateToken = require('../config/generateToken')
 
-const apiKey = process.env.SENDGRID_API_KEY
-const template = process.env.TEMPLATE_ID
-const proxy = process.env.PROXY
+const mailTransport = nodemailer.createTransport(
+  postmarkTransport({
+    auth: {
+      apiKey: '<apikey>'
+    },
+    proxy: 'http://proxy.policiamilitar.sp.gov.br'
+  })
+)
 
 class AuthController {
   static async auth(req, res) {
@@ -46,38 +52,26 @@ class AuthController {
         { where: { email } }
       )
 
-      const options = {
-        method: 'POST',
-        url: 'https://api.sendgrid.com/v3/mail/send',
-        proxy,
-        headers: {
-          'content-type': 'application/json',
-          authorization: `Bearer ${apiKey}`
-        },
-        rejectUnauthorized: false, //add when working with https sites
-        requestCert: false, //add when working with https sites
-        //agent: false,
-        body: {
-          personalizations: [
-            {
-              to: [{ email: `${email}` }],
-              dynamic_template_data: {
-                token: `${token}`
-              },
-              subject: 'Reset pass'
-            }
-          ],
-          from: { email: 'no-reply@geekplug.com.br', name: 'No Reply' },
-
-          template_id: `${template}`
-        },
-        json: true
+      function sendEmail(user) {
+        // Set email optins
+        const mailOptions = {
+          from: '"Dave" <dave@example.net>',
+          to: email,
+          subject: 'Welcome!',
+          text: `Veja seu token: ${token}`,
+          html: `teste`
+        }
+        // Send via nodemailer & custom transport
+        return mailTransport
+          .sendMail(mailOptions)
+          .then(() => console.log('Email sent successfully!'))
+          .catch(error =>
+            console.error('There was an error while sending the email:', error)
+          )
       }
 
-      request(options, function (error, response, body) {
-        if (error) throw new Error(error)
-
-        res.send(body)
+      return sendEmail({
+        email: '<USERS-EMAIL-HERE>'
       })
     } catch (err) {
       console.log(err)
