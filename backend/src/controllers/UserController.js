@@ -58,12 +58,28 @@ class UserController {
 
   static async update(req, res) {
     const { id } = req.params
-    const newInfo = req.body
+    const { firstName, lastName, email, password } = req.body
     try {
-      await database.Users.update(newInfo, { where: { id: Number(id) } })
+      await database.Users.update(
+        {
+          user: {
+            firstName,
+            lastName,
+            email
+          },
+          token: generateToken({ id: user.id })
+        },
+        { where: { id: Number(id) } }
+      )
       const postUpdated = await database.Users.findOne({
         where: { id: Number(id) }
       })
+
+      database.Users.beforeUpdate(async (user, _) => {
+        const hashedPass = await bcrypt.hash(password, 10)
+        user.password = hashedPass
+      })
+
       return res.status(200).json(postUpdated)
     } catch (error) {
       return res.status(500).json(error.message)

@@ -1,6 +1,5 @@
-const customExpress = require('./src/config/custom-express')
-
 require('dotenv').config()
+const customExpress = require('./src/config/custom-express')
 
 const app = customExpress
 

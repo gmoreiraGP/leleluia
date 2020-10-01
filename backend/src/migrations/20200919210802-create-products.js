@@ -13,7 +13,9 @@ module.exports = {
       quantity: { type: Sequelize.INTEGER },
       invoiceID: {
         type: Sequelize.INTEGER,
-        references: { model: 'Invoice', key: 'id' }
+        references: { model: 'Invoices', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       }
     })
   },

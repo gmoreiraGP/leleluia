@@ -1,9 +1,9 @@
 'use strict'
-const { Model } = require('sequelize')
+const { DataTypes } = require('sequelize')
 
-module.exports = (sequelize, DataTypes) => {
-  const Address = sequelize.define(
-    'Address',
+module.exports = sequelize => {
+  const Addresses = sequelize.define(
+    'Addresses',
     {
       receiverName: DataTypes.STRING,
       document: DataTypes.INTEGER,
@@ -17,11 +17,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   )
-  Address.associate = function (models) {
-    Address.belongsTo(models.Invoice, {
-      foreignKey: 'invoiceID'
-    })
-  }
 
-  return Address
+  return Addresses
 }

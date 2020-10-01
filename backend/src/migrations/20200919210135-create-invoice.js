@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Invoice', {
+    return queryInterface.createTable('Invoices', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,11 +12,17 @@ module.exports = {
       companyName: { type: Sequelize.STRING },
       numberNote: { allowNull: false, type: Sequelize.STRING },
       document: { type: Sequelize.INTEGER },
-      emission: { type: Sequelize.DATE }
+      emission: { type: Sequelize.DATE },
+      createdAt: {
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        type: Sequelize.DATE
+      }
     })
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Invoice')
+    return queryInterface.dropTable('Invoices')
   }
 }

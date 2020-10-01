@@ -1,8 +1,8 @@
+require('dotenv').config()
+
 const express = require('express')
 const session = require('express-session')
 const routes = require('../routes')
-
-require('dotenv').config()
 
 const customExpress = express()
 

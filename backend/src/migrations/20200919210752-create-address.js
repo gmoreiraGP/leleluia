@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Address', {
+    return queryInterface.createTable('Addresses', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -20,12 +20,14 @@ module.exports = {
       status: { type: Sequelize.STRING },
       invoiceID: {
         type: Sequelize.INTEGER,
-        references: { model: 'Invoice', key: 'id' }
+        references: { model: 'Invoices', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE'
       }
     })
   },
 
   down: async (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Address')
+    return queryInterface.dropTable('Addresses')
   }
 }
